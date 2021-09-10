@@ -1,3 +1,12 @@
+## Fork notes
+
+*Updates 10-Sept-21*
+1. PW added SES boilerplate to `api/login.js`.
+2. PW added `api/add_SES_policy.json`, which so far is not defined in YAML, I added it to the Lambda execution role via the AWS Console. 
+
+*original repo's instructions below this line*
+----
+
 # Cognito magic links POC
 
 This simple POC shows a good way to create a [user-friendly magic link login system](https://uxdesign.cc/user-friendly-magic-links-e39023ec3e2) using AWS Cognito, Lambda and the Serverless framework.

@@ -1,6 +1,7 @@
 const { v4: uuid } = require('uuid');
 const AWS = require('aws-sdk');
 const cognito = new AWS.CognitoIdentityServiceProvider();
+const ses = new AWS.SES({ region: "us-east-1" });
 
 module.exports.handler = async(event) => {
 
@@ -23,15 +24,24 @@ module.exports.handler = async(event) => {
         // NOTE: Normally, here is where you would send an email with this URL, not output it back to the user!
 
         const url = `${process.env.URL}/sign-in/${email},${authChallenge}`;
-        return {
-            statusCode: 200,
-            headers: {
-                'Access-Control-Allow-Origin': '*'
+
+        const msg = "Your link is " + url;
+
+        let params = {
+            Destination: {
+              ToAddresses: [email],
             },
-            body: JSON.stringify({
-                demoUrl: url
-            })
-        };
+            Message: {
+              Body: {
+                Text: { Data: msg },
+              },
+              Subject: { Data: "Nice work!" },
+            },
+            Source: "SENDEREMAIL",
+          };
+
+        return ses.sendEmail(params).promise();
+        
     } catch (e) {
         return {
             statusCode: 400,
